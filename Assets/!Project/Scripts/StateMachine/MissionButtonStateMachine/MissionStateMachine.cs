@@ -1,17 +1,17 @@
 public class MissionStateMachine : StateMachine
 {
-    private IState CurrentState;
+    private IState _currentState;
 
     public override void Initialize<MissionButtonState>(MissionButtonState initialState)
     {
-        CurrentState = initialState;
-        CurrentState.Enter();
+        _currentState = initialState;
+        _currentState.Enter();
     }
 
     public override void ChangeState<MissionButtonState>(MissionButtonState newState)
     {
-        CurrentState.Exit();
-        CurrentState = newState;
-        CurrentState.Enter();
+        _currentState.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 }

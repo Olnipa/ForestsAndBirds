@@ -14,10 +14,9 @@ public class MissionPanelHandler : MonoBehaviour, IUICloser
 
     private UIStateMachine _uiStateMachine;
     private MissionData _tempMissionData;
+    private List<IPanelUI> _panels = new List<IPanelUI>();
 
     public event UnityAction HeroIsNotChosen;
-
-    private List<IPanelUI> _panels = new List<IPanelUI>();
 
     private void Start()
     {

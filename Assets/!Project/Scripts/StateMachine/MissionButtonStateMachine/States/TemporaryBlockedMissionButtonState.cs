@@ -23,9 +23,4 @@ public class TemporaryBlockedMissionButtonState : MissionButtonState
         _missionButtonImage.color = _temporaryBlockedButtonColor;
         _missionButtonImage.raycastTarget = false;
     }
-
-    public override void Exit()
-    {
-
-    }
 }

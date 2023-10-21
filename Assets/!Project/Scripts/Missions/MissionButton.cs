@@ -1,66 +1,66 @@
 using System;
 using UnityEngine;
 
-public abstract class MissionButton : IMissionButton
+public class MissionButton : IMissionButton
 {
-    protected MissionPanel _leftMissionPanelPrefab;
-    protected MissionData _firstMissionData;
+    protected MissionPanel LeftMissionPanelPrefab;
+    protected MissionData FirstMissionData;
 
-    protected MissionButtonView _buttonView;
+    protected MissionButtonView ButtonView;
 
     public event Action<MissionButton> MissionButtonClicked;
 
     public MissionButton(MissionData firstMission, MissionPanel leftMissionPanelPrefab)
     {
-        _firstMissionData = firstMission;
-        _leftMissionPanelPrefab = leftMissionPanelPrefab;
+        FirstMissionData = firstMission;
+        LeftMissionPanelPrefab = leftMissionPanelPrefab;
     }
 
     protected virtual void OnMissionInfoButtonClick()
     {
         MissionButtonClicked?.Invoke(this);
-        _leftMissionPanelPrefab.Initialize(_firstMissionData);
+        LeftMissionPanelPrefab.Initialize(FirstMissionData);
     }
 
     protected virtual MissionState GetState()
     {
-        return _firstMissionData.State;
+        return FirstMissionData.State;
     }
 
     protected virtual string GetID()
     {
-        return _firstMissionData.ID;
+        return FirstMissionData.ID;
     }
 
     private void RemoveListenersOfMissionButtonView()
     {
-        _buttonView.Button.onClick.RemoveListener(OnMissionInfoButtonClick);
-        _firstMissionData.StateUpdated -= OnFirstMissionDataUpdated;
-        _buttonView.Destroyed -= RemoveListenersOfMissionButtonView;
+        ButtonView.Button.onClick.RemoveListener(OnMissionInfoButtonClick);
+        FirstMissionData.StateUpdated -= OnFirstMissionDataUpdated;
+        ButtonView.Destroyed -= RemoveListenersOfMissionButtonView;
     }
 
     protected virtual void AddListenerToMissionDataUpdate()
     {
-        _firstMissionData.StateUpdated += OnFirstMissionDataUpdated;
+        FirstMissionData.StateUpdated += OnFirstMissionDataUpdated;
     }
 
     protected void OnFirstMissionDataUpdated()
     {
-        _buttonView.SetNewState(_firstMissionData.State);
+        ButtonView.SetNewState(FirstMissionData.State);
     }
 
     public void InitializeView(MissionButtonView buttonView)
     {
-        _buttonView = buttonView;
-        _buttonView.SetID(GetID());
-        _buttonView.SetNewState(GetState());
+        ButtonView = buttonView;
+        ButtonView.SetID(GetID());
+        ButtonView.SetNewState(GetState());
 
-        _buttonView.Button.onClick.AddListener(OnMissionInfoButtonClick);
-        _buttonView.Destroyed += RemoveListenersOfMissionButtonView;
+        ButtonView.Button.onClick.AddListener(OnMissionInfoButtonClick);
+        ButtonView.Destroyed += RemoveListenersOfMissionButtonView;
 
-        _buttonView.transform.localPosition = Vector3.zero;
-        _buttonView.RectTransform.anchorMin = _firstMissionData.ButtonAnchorsPosition;
-        _buttonView.RectTransform.anchorMax = _buttonView.RectTransform.anchorMin;
+        ButtonView.transform.localPosition = Vector3.zero;
+        ButtonView.RectTransform.anchorMin = FirstMissionData.ButtonAnchorsPosition;
+        ButtonView.RectTransform.anchorMax = ButtonView.RectTransform.anchorMin;
 
         AddListenerToMissionDataUpdate();
     }

@@ -17,15 +17,6 @@ public abstract class HeroModel
         IsUnlocked = isAvailableAtStart;
     }
 
-    public void SetHeroView(HeroView heroView)
-    {
-        _heroView = heroView;
-
-        _heroView.HeroViewSelected += OnHeroSelected;
-        _heroView.HeroViewUnSelected += OnHeroUnSelected;
-        _heroView.Destroyed += OnHeroViewDestroy;
-    }
-
     private void OnHeroViewDestroy()
     {
         _heroView.Destroyed -= OnHeroViewDestroy;
@@ -65,5 +56,14 @@ public abstract class HeroModel
 
         Experience += experience;
         _heroView.UpdateExperience(Experience);
+    }
+
+    public void SetHeroView(HeroView heroView)
+    {
+        _heroView = heroView;
+
+        _heroView.HeroViewSelected += OnHeroSelected;
+        _heroView.HeroViewUnSelected += OnHeroUnSelected;
+        _heroView.Destroyed += OnHeroViewDestroy;
     }
 }

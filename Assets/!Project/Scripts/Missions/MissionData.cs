@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class MissionData : IStateChangable
+public class MissionData
 {
     public string ID { get; private set; }
     public MissionState State { get; protected set; }

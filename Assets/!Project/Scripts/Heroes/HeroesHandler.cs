@@ -9,8 +9,8 @@ public class HeroesHandler : MonoBehaviour
     [SerializeField] private GameObject _heroViewPrefab;
     [SerializeField] private ToggleGroup _toggleGroupContainer;
     
-    private List<HeroView> _heroesView = new List<HeroView>();
-    private Dictionary<Type, HeroModel> _heroesModel = new Dictionary<Type, HeroModel>() 
+    private readonly List<HeroView> _heroesView = new List<HeroView>();
+    private readonly Dictionary<Type, HeroModel> _heroesModel = new Dictionary<Type, HeroModel>() 
     {
         { typeof(Hawk), new Hawk() },
         { typeof(Gull), new Gull() },

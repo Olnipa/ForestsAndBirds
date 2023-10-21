@@ -15,7 +15,9 @@ public class MissionsHandler : MonoBehaviour
     private UIStateMachine _uiStateMachine;
 
     private List<MissionData> _missionsData = new List<MissionData>();
-    private List<MissionButton> _missionsButtonsModel = new List<MissionButton>();
+
+    private readonly List<MissionButton> _missionsButtonsModel = new List<MissionButton>();
+    private readonly List<MissionData> _usedMissionsData = new List<MissionData>();
 
     private void Start()
     {
@@ -35,8 +37,6 @@ public class MissionsHandler : MonoBehaviour
         _heroesHandler.TryUnlockHeroesByType(heroesTypesToUnlock);
     }
 
-    private readonly List<MissionData> _usedMissionsData = new List<MissionData>();
-
     private void FillMissionButtonsModelList()
     {
         foreach (var missionData in _missionsData)
@@ -46,6 +46,8 @@ public class MissionsHandler : MonoBehaviour
 
             _missionsButtonsModel.Add(GetButton(missionData));
         }
+
+        _usedMissionsData.Clear();
     }
 
     private MissionButton GetButton(MissionData missionData)
@@ -72,12 +74,12 @@ public class MissionsHandler : MonoBehaviour
     private MissionButton GetSingleMissionButton(MissionData missionData)
     {
         _usedMissionsData.Add(missionData);
-        return new SingleMissionButton(missionData, _leftMissionPanel);
+        return new MissionButton(missionData, _leftMissionPanel);
     }
 
     private void OnMissionButtonClick(MissionButton missionButton)
     {
-        if (missionButton is SingleMissionButton)
+        if (missionButton is MissionButton)
             _uiStateMachine.ChangeState(new SingleMissionInfoUIState(_leftMissionPanel));
         else if (missionButton is DoubleMissionButton)
             _uiStateMachine.ChangeState(new DoubleMissionInfoUIState(_leftMissionPanel, _rightMissionPanel));

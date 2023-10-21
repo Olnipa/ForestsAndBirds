@@ -1,17 +1,17 @@
 public class UIStateMachine : StateMachine
 {
-    private static IState CurrentState;
+    private static IState _currentState;
 
     public override void Initialize<UIPanelsState>(UIPanelsState initialState)
     {
-        CurrentState = initialState;
-        CurrentState.Enter();
+        _currentState = initialState;
+        _currentState.Enter();
     }
 
     public override void ChangeState<UIPanelsState>(UIPanelsState newState)
     {
-        CurrentState.Exit();
-        CurrentState = newState;
-        CurrentState.Enter();
+        _currentState.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 }

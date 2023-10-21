@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Linq;
-using System.Reflection;
 
 [RequireComponent(typeof(MissionsHandler))]
 public class MissionLoader : MonoBehaviour
@@ -25,7 +24,6 @@ public class MissionLoader : MonoBehaviour
     private const int PlayerSideIndex = 9;
     private const int EnemySideIndex = 10;
     private const int HeroToUnlockIndex = 11;
-
     private const int CurrentHeroExperienceIndex = 12;
     private const int HawkExperienceIndex = 13;
     private const int CrowExperienceIndex = 14;

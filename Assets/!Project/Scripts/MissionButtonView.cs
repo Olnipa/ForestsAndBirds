@@ -37,6 +37,11 @@ public class MissionButtonView : MonoBehaviour
         _stateMachine.Initialize(_stateFactory.GetState(_state));
     }
 
+    private void OnDestroy()
+    {
+        Destroyed?.Invoke();
+    }
+
     public void SetNewState(MissionState newState)
     {
         _state = newState;
@@ -46,10 +51,5 @@ public class MissionButtonView : MonoBehaviour
     public void SetID(string id)
     {
         ID.text = id;
-    }
-
-    private void OnDestroy()
-    {
-        Destroyed?.Invoke();
     }
 }

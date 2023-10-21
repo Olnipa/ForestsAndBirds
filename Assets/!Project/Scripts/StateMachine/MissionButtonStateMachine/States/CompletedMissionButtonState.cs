@@ -23,9 +23,4 @@ public class CompletedMissionButtonState : MissionButtonState
         _missionButtonImage.color = _completedButtonColor;
         _missionButtonImage.raycastTarget = false;
     }
-
-    public override void Exit()
-    {
-
-    }
 }
