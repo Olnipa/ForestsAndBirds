@@ -1,0 +1,110 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public class MissionPanelHandler : MonoBehaviour, IUICloser
+{
+    [SerializeField] private Button _closePanelsButton;
+    [SerializeField] private MissionPanel _leftMissionPanel;
+    [SerializeField] private MissionPanel _rightMissionPanel;
+    [SerializeField] private FightPanel _fightPanel;
+
+    [SerializeField] private HeroesHandler _heroesHandler;
+
+    private UIStateMachine _uiStateMachine;
+    private MissionData _tempMissionData;
+
+    public event UnityAction HeroIsNotChosen;
+
+    private List<IPanelUI> _panels = new List<IPanelUI>();
+
+    private void Start()
+    {
+        _uiStateMachine = new UIStateMachine();
+        _uiStateMachine.Initialize(new MapUIState(this));
+        _panels.AddRange(GetComponentsInChildren<IPanelUI>());
+        CloseAllPanels();
+
+        _leftMissionPanel.Enabled += OnLeftMissionPanelEnabled;
+        _leftMissionPanel.Enabled += OnRightMissionPanelEnabled;
+    }
+
+    private void OnDestroy()
+    {
+        _leftMissionPanel.Enabled -= OnLeftMissionPanelEnabled;
+        _leftMissionPanel.Enabled -= OnRightMissionPanelEnabled;
+    }
+
+    public void OnLeftMissionPanelEnabled()
+    {
+        _leftMissionPanel.StartButtonClicked += OnStartButtonClick;
+        _leftMissionPanel.Disabled += OnLeftMissionPanelDisable;
+    }
+
+    public void OnRightMissionPanelEnabled()
+    {
+        _rightMissionPanel.StartButtonClicked += OnStartButtonClick;
+        _rightMissionPanel.Disabled += OnRightMissionPanelDisable;
+    }
+
+    private void OnEnable()
+    {
+        _closePanelsButton.onClick.AddListener(CloseAllPanels);
+    }
+
+    private void OnDisable()
+    {
+        _closePanelsButton.onClick.RemoveListener(CloseAllPanels);
+    }
+
+    private void OnLeftMissionPanelDisable()
+    {
+        _leftMissionPanel.StartButtonClicked -= OnStartButtonClick;
+        _leftMissionPanel.Disabled -= OnLeftMissionPanelDisable;
+    }
+
+    private void OnRightMissionPanelDisable()
+    {
+        _rightMissionPanel.StartButtonClicked -= OnStartButtonClick;
+        _leftMissionPanel.Disabled -= OnRightMissionPanelDisable;
+    }
+
+    private void OnFightPanelDisable()
+    {
+        _fightPanel.FinishButtonCllicked -= OnFinishButtonClick;
+        _fightPanel.Disabled -= OnFightPanelDisable;
+    }
+
+    private void OnStartButtonClick(MissionData missionData)
+    {
+        if (HeroesHandler.CurrentHeroModel == null)
+        {
+            HeroIsNotChosen?.Invoke();
+            return;
+        }
+
+        _tempMissionData = missionData;
+        _fightPanel.Initialize(missionData);
+        _uiStateMachine.ChangeState(new FightUIState(_fightPanel));
+
+        _fightPanel.FinishButtonCllicked += OnFinishButtonClick;
+        _fightPanel.Disabled += OnFightPanelDisable;
+    }
+
+    private void OnFinishButtonClick()
+    {
+        _tempMissionData.SetNewState(MissionState.Completed);
+        _uiStateMachine.ChangeState(new MapUIState(this));
+
+        HeroesHandler.CurrentHeroModel.AddExperience(_tempMissionData.GetExperienceByType(typeof(HeroModel)));
+    }
+
+    public void CloseAllPanels()
+    {
+        foreach (var panel in _panels)
+        {
+            panel.DisablePanel();
+        }
+    }
+}
