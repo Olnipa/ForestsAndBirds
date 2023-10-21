@@ -4,16 +4,17 @@ public abstract class HeroModel
 {
     public int Experience { get; protected set; }
     public string Name { get; protected set; }
-    public bool IsAvailable { get; private set; }
+    public bool IsUnlocked { get; private set; }
 
     private HeroView _heroView;
 
     public event Action<HeroModel> HeroModelSelected;
     public event Action HeroModelUnSelected;
+    public event Action HeroUnlocked;
 
     public HeroModel(bool isAvailableAtStart)
     {
-        IsAvailable = isAvailableAtStart;
+        IsUnlocked = isAvailableAtStart;
     }
 
     public void SetHeroView(HeroView heroView)
@@ -37,23 +38,29 @@ public abstract class HeroModel
         HeroModelSelected?.Invoke(this);
     }
 
-    private void OnHeroUnSelected()
+    public void OnHeroUnSelected()
     {
         HeroModelUnSelected?.Invoke();
     }
 
+    public void UnSelectHeroView()
+    {
+        _heroView.HeroToggle.isOn = false;
+    }
+
     public void UnLock()
     {
-        if (IsAvailable == false)
+        if (IsUnlocked == false)
         {
-            IsAvailable = true;
+            IsUnlocked = true;
             _heroView.SetAvailability(true);
+            HeroUnlocked?.Invoke();
         }
     }
 
     public void AddExperience(int experience)
     {
-        if (experience <= 0)
+        if (experience == 0)
             return;
 
         Experience += experience;

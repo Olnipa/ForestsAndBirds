@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Linq;
+using System.Reflection;
 
-[RequireComponent(typeof(MissionButtonsHandler))]
+[RequireComponent(typeof(MissionsHandler))]
 public class MissionLoader : MonoBehaviour
 {
-    private MissionButtonsHandler _missionsHandler;
+    private MissionsHandler _missionsHandler;
 
     private List<MissionData> _missionsData = new List<MissionData>();
 
@@ -18,7 +19,7 @@ public class MissionLoader : MonoBehaviour
     private const int ButtonPositionXIndex = 3;
     private const int ButtonPositionYIndex = 4;
     private const int ExclusiveMissionIndex = 5;
-    private const int UnlockConditionIndex = 6;
+    private const int MissionsIDToUnlock = 6;
     private const int DescriptionIndex = 7;
     private const int MainMissionTextIndex = 8;
     private const int PlayerSideIndex = 9;
@@ -32,11 +33,14 @@ public class MissionLoader : MonoBehaviour
     private const int GullExperienceIndex = 16;
 
     private const char SeparatorOR = '|';
+    private const char SeparatorAND = '&';
 
     private void Start()
     {
-        _missionsHandler = GetComponent<MissionButtonsHandler>();
+        _missionsHandler = GetComponent<MissionsHandler>();
         LoadMissionsData();
+
+        TryFindMissingUnlockedIDs(_missionsData);
         _missionsHandler.Initialize(_missionsData);
     }
 
@@ -51,17 +55,33 @@ public class MissionLoader : MonoBehaviour
         }
     }
 
+    private void TryFindMissingUnlockedIDs(List<MissionData> missionsData)
+    {
+        HashSet<string> missionsID = new HashSet<string>(missionsData.Select(missionData => missionData.ID));
+
+        foreach (var missionData in missionsData)
+        {
+            if (string.IsNullOrEmpty(missionData.MissionsIDToUnlock[0]))
+                continue;
+
+            string missingID = missionData.MissionsIDToUnlock.FirstOrDefault(idToUnlock => missionsID.Contains(idToUnlock) == false);
+
+            if (missingID != null)
+                throw new Exception($"Mission ID to Unlock in Mission ID {missionData.ID} is not existed");
+        }
+    }
+
     private MissionData GetMissionData(string[] dataLine)
     {
         string id = dataLine[IDPositionIndex];
         int state = GetNumberByString(dataLine[StateIndex]);
         Vector2 position = GetPosition(dataLine[ButtonPositionXIndex], dataLine[ButtonPositionYIndex]);
         string exclusiveMissionID = dataLine[ExclusiveMissionIndex];
-        List<string> missionsIDToComplete = GetMissionsIDToUnlock(dataLine[UnlockConditionIndex]);
+        List<string> missionsIDToUnlock = GetMissionsIDToUnlock(dataLine[MissionsIDToUnlock]);
         List<Type> heroesToUnlock = GetTypesOfHeroesToUnlock(dataLine[HeroToUnlockIndex]);
         Dictionary<Type, int> experienceForHeroes = GetMissionExperience(dataLine);
 
-        return new MissionData(id, state, dataLine[NameIndex], position, exclusiveMissionID, missionsIDToComplete, dataLine[DescriptionIndex], 
+        return new MissionData(id, state, dataLine[NameIndex], position, exclusiveMissionID, missionsIDToUnlock, dataLine[DescriptionIndex], 
             dataLine[MainMissionTextIndex], dataLine[PlayerSideIndex], dataLine[EnemySideIndex], heroesToUnlock, experienceForHeroes);
     }
 
@@ -98,7 +118,7 @@ public class MissionLoader : MonoBehaviour
 
     private List<string> GetMissionsIDToUnlock(string stringMissionsIDToUnlock)
     {
-        return stringMissionsIDToUnlock.Split(SeparatorOR).ToList();
+        return stringMissionsIDToUnlock.Split(SeparatorAND).ToList();
     }
 
     private Vector2 GetPosition(string stringPositionX, string stringPositionY)

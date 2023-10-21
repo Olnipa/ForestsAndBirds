@@ -16,11 +16,12 @@ public class HeroView : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI Name;
 
     private Image _rayCastImage;
-    private HeroToggle _heroToggle;
 
     public event UnityAction HeroViewSelected;
     public event UnityAction HeroViewUnSelected;
     public event UnityAction Destroyed;
+
+    public  HeroToggle HeroToggle { get; private set; }
 
     private void OnSelectValueChanged(bool isChecked)
     {
@@ -33,21 +34,21 @@ public class HeroView : MonoBehaviour
     private void Awake()
     {
         _rayCastImage = GetComponent<Image>();
-        _heroToggle = GetComponent<HeroToggle>();
-        _heroToggle.onValueChanged.AddListener(OnSelectValueChanged);
+        HeroToggle = GetComponent<HeroToggle>();
+        HeroToggle.onValueChanged.AddListener(OnSelectValueChanged);
 
         SetAvailability(IsAvailable);
     }
 
     private void OnDestroy()
     {
-        _heroToggle.onValueChanged.RemoveListener(OnSelectValueChanged);
+        HeroToggle.onValueChanged.RemoveListener(OnSelectValueChanged);
         Destroyed?.Invoke();
     }
 
     public void SetToggleGroup(ToggleGroup toggleGroup)
     {
-        _heroToggle.group = toggleGroup;
+        HeroToggle.group = toggleGroup;
     }
 
     public void SwitchRayCastTarget(bool isOn)
@@ -59,10 +60,10 @@ public class HeroView : MonoBehaviour
     {
         _lockedView.gameObject.SetActive(!isAvailable);
         _unlockedView.gameObject.SetActive(isAvailable);
-        _heroToggle.enabled = isAvailable;
+        HeroToggle.enabled = isAvailable;
 
         if (isAvailable == false)
-            _heroToggle.isOn = false;
+            HeroToggle.isOn = false;
     }
 
     public void UpdateInfo(string name, int experience, bool isAvailable)

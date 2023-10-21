@@ -20,16 +20,6 @@ public abstract class MissionButton : IMissionButton
     {
         MissionButtonClicked?.Invoke(this);
         _leftMissionPanelPrefab.Initialize(_firstMissionData);
-        _leftMissionPanelPrefab.StartButton.onClick.AddListener(OnLeftMissionStartButtonClick);
-        _leftMissionPanelPrefab.Disabled += RemoveListenerFromStartButton;
-    }
-
-    private void OnLeftMissionStartButtonClick()
-    {
-        if (HeroesHandler.CurrentHeroModel == null)
-            return;
-
-        _firstMissionData.SetNewState(MissionState.TemporaryBlocked);
     }
 
     protected virtual MissionState GetState()
@@ -40,12 +30,6 @@ public abstract class MissionButton : IMissionButton
     protected virtual string GetID()
     {
         return _firstMissionData.ID;
-    }
-
-    protected virtual void RemoveListenerFromStartButton()
-    {
-        _leftMissionPanelPrefab.Disabled -= RemoveListenerFromStartButton;
-        _leftMissionPanelPrefab.StartButton.onClick.RemoveListener(OnLeftMissionStartButtonClick);
     }
 
     private void RemoveListenersOfMissionButtonView()

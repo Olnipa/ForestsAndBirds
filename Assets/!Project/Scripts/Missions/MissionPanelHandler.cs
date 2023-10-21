@@ -51,11 +51,13 @@ public class MissionPanelHandler : MonoBehaviour, IUICloser
     private void OnEnable()
     {
         _closePanelsButton.onClick.AddListener(CloseAllPanels);
+        _closePanelsButton.onClick.AddListener(_heroesHandler.AllowPossibilityToChoseHero);
     }
 
     private void OnDisable()
     {
         _closePanelsButton.onClick.RemoveListener(CloseAllPanels);
+        _closePanelsButton.onClick.RemoveListener(_heroesHandler.AllowPossibilityToChoseHero);
     }
 
     private void OnLeftMissionPanelDisable()
@@ -78,15 +80,18 @@ public class MissionPanelHandler : MonoBehaviour, IUICloser
 
     private void OnStartButtonClick(MissionData missionData)
     {
-        if (HeroesHandler.CurrentHeroModel == null)
+        if (_heroesHandler.CurrentHeroModel == null)
         {
             HeroIsNotChosen?.Invoke();
             return;
         }
 
+        missionData.SetNewState(MissionState.TemporaryBlocked);
         _tempMissionData = missionData;
         _fightPanel.Initialize(missionData);
         _uiStateMachine.ChangeState(new FightUIState(_fightPanel));
+
+        _heroesHandler.BlockPossibilityToChooseHero();
 
         _fightPanel.FinishButtonCllicked += OnFinishButtonClick;
         _fightPanel.Disabled += OnFightPanelDisable;
@@ -97,7 +102,9 @@ public class MissionPanelHandler : MonoBehaviour, IUICloser
         _tempMissionData.SetNewState(MissionState.Completed);
         _uiStateMachine.ChangeState(new MapUIState(this));
 
-        HeroesHandler.CurrentHeroModel.AddExperience(_tempMissionData.GetExperienceByType(typeof(HeroModel)));
+        _heroesHandler.SetExperienseForCompletedMission(_tempMissionData);
+        _heroesHandler.AllowPossibilityToChoseHero();
+        _heroesHandler.CurrentHeroModel.UnSelectHeroView();
     }
 
     public void CloseAllPanels()

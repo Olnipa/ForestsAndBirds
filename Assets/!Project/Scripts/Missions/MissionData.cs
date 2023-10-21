@@ -9,8 +9,8 @@ public class MissionData : IStateChangable
     public MissionState State { get; protected set; }
     public string Name { get; private set; }
     public Vector2 ButtonAnchorsPosition { get; private set; }
-    public string ExclusiveMissionID { get; private set; }
-    public List<string> MissionsIDToCompleteToBeActive { get; private set; }
+    public string MutuallyExclusiveID { get; private set; }
+    public List<string> MissionsIDToUnlock { get; private set; }
     public string Description { get; private set; }
     public string MissionText { get; private set; }
     public string PlayerSide { get; private set; }
@@ -19,16 +19,17 @@ public class MissionData : IStateChangable
     public Dictionary<Type, int> ExperienceForHeroes { get; private set; }
 
     public event Action StateUpdated;
+    public event Action<List<string>, List<Type>> Completed;
 
-    public MissionData(string id, int state, string name, Vector2 position, string exclusiveMissionID, List<string> missionsIDToCompleteToBeActive, string descriptionText, 
+    public MissionData(string id, int state, string name, Vector2 position, string exclusiveMissionID, List<string> missionsIDToUnlock, string descriptionText, 
         string missionText, string playerSide, string enemySide, List<Type> heroesToUnlock, Dictionary<Type, int> experienceForHeroes)
     {
         ID = id;
         State = GetMissionState(state);
         Name = name;
         ButtonAnchorsPosition = position;
-        ExclusiveMissionID = exclusiveMissionID;
-        MissionsIDToCompleteToBeActive = missionsIDToCompleteToBeActive;
+        MutuallyExclusiveID = exclusiveMissionID;
+        MissionsIDToUnlock = missionsIDToUnlock;
         Description = descriptionText;
         MissionText = missionText;
         PlayerSide = playerSide;
@@ -37,7 +38,7 @@ public class MissionData : IStateChangable
         ExperienceForHeroes = experienceForHeroes;
     }
 
-    public MissionState GetMissionState(int stateIndex)
+    private MissionState GetMissionState(int stateIndex)
     {
         if (stateIndex >= 0 && stateIndex < Enum.GetNames(typeof(MissionState)).Length)
             return (MissionState)stateIndex;
@@ -52,9 +53,12 @@ public class MissionData : IStateChangable
 
         State = newState;
         StateUpdated?.Invoke();
+
+        if (newState == MissionState.Completed)
+            Completed?.Invoke(MissionsIDToUnlock, HeroesToUnlock);
     }
 
-    public int GetExperienceByType(Type heroType)
+    public int GetExperienceForMissionByHeroType(Type heroType)
     {
         foreach (var experienceForHero in ExperienceForHeroes)
         {

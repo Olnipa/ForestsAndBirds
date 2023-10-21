@@ -10,11 +10,6 @@ public class DoubleMissionButton : MissionButton
         _rightMissionPanelPrefab = rightMissionPanelPrefab;
     }
 
-    private void OnRightMissionStartButtonClick()
-    {
-        _secondMissionData.SetNewState(MissionState.TemporaryBlocked);
-    }
-
     private void OnSecondMissionDataUpdated()
     {
         _buttonView.SetNewState(_secondMissionData.State);
@@ -24,8 +19,6 @@ public class DoubleMissionButton : MissionButton
     {
         base.OnMissionInfoButtonClick();
         _rightMissionPanelPrefab.Initialize(_secondMissionData);
-        _rightMissionPanelPrefab.StartButton.onClick.AddListener(OnRightMissionStartButtonClick);
-        _rightMissionPanelPrefab.Disabled += RemoveListenerFromStartButton;
         _rightMissionPanelPrefab.gameObject.SetActive(true);
     }
 
@@ -46,14 +39,6 @@ public class DoubleMissionButton : MissionButton
         string[] ID = _firstMissionData.ID.Split('.');
 
         return ID[0];
-    }
-
-    protected override void RemoveListenerFromStartButton()
-    {
-        base.RemoveListenerFromStartButton();
-
-        _rightMissionPanelPrefab.StartButton.onClick.RemoveListener(OnRightMissionStartButtonClick);
-        _rightMissionPanelPrefab.Disabled -= RemoveListenerFromStartButton;
     }
 
     protected override void AddListenerToMissionDataUpdate()
