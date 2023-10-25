@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Best.CodeAnalysis.Static Rule Set" Description=" " ToolsVersion="16.0">
+  <Include Path="basiccorrectnessrules.ruleset" Action="Default" />
+  <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />
+  <Include Path="extendeddesignguidelinerules.ruleset" Action="Default" />
+  <Include Path="globalizationrules.ruleset" Action="Default" />
+  <Include Path="minimumrecommendedrules.ruleset" Action="Default" />
+  <Include Path="securityrules.ruleset" Action="Default" />
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
+    <Rule Id="CS1591" Action="Error" />
+  </Rules>
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1107" Action="Error" />
+    <Rule Id="SA1131" Action="Error" />
+    <Rule Id="SA1134" Action="Error" />
+    <Rule Id="SA1200" Action="Info" />
+    <Rule Id="SA1306" Action="None" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1600" Action="Error" />
+    <Rule Id="SA1633" Action="Info" />
+    <Rule Id="SX1101" Action="Error" />
+    <Rule Id="SX1309" Action="Error" />
+    <Rule Id="SX1309S" Action="Error" />
+  </Rules>
+</RuleSet>

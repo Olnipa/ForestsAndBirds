@@ -12,6 +12,7 @@ public class DoubleMissionInfoUIState : UIPanelsState
     public override void Enter()
     {
         _firstMissionPanel.EnablePanel();
+        _SecondMissionPanel.EnablePanel();
     }
 
     public override void Exit()

@@ -26,11 +26,6 @@ public class FightPanel : MonoBehaviour, IPanelUI
         _finishButton.onClick.RemoveListener(OnFinishButtonClick);
     }
 
-    private void OnFinishButtonClick()
-    {
-        FinishButtonCllicked?.Invoke();
-    }
-
     public void Initialize(MissionData missionData)
     {
         _lable.text = missionData.Name;
@@ -48,5 +43,10 @@ public class FightPanel : MonoBehaviour, IPanelUI
     public void EnablePanel()
     {
         gameObject.SetActive(true);
+    }
+
+    private void OnFinishButtonClick()
+    {
+        FinishButtonCllicked?.Invoke();
     }
 }

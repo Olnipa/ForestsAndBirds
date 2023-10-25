@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4370524014673041795}
   - component: {fileID: 7969119256596789467}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: IDText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,3 +295,8 @@ MonoBehaviour:
   _activeButtonColor: {r: 0.9372549, g: 0.9529412, b: 0.5254902, a: 1}
   _temporaryBlockedButtonColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   _completedButtonColor: {r: 0.255, g: 0.7830189, b: 0.357, a: 1}
+  _animator: {fileID: 6701677720509655404}
+  _id: {fileID: 7969119256596789467}
+  _image: {fileID: 6082078014436481975}
+  _infoButton: {fileID: 3211458846871641922}
+  _rectTransform: {fileID: 6739588005092878774}

@@ -10,7 +10,6 @@ public class MissionPanel : MonoBehaviour, IPanelUI
     [SerializeField] private Image _image;
 
     private Button _startButton;
-
     private MissionData _missionData;
 
     public event UnityAction<MissionData> StartButtonClicked;
@@ -35,11 +34,6 @@ public class MissionPanel : MonoBehaviour, IPanelUI
         _startButton.onClick.RemoveListener(OnStartMissionClick);
     }
 
-    private void OnStartMissionClick()
-    {
-        StartButtonClicked?.Invoke(_missionData);
-    }
-
     public void Initialize(MissionData missionData)
     {
         _missionData = missionData;
@@ -56,5 +50,10 @@ public class MissionPanel : MonoBehaviour, IPanelUI
     public void EnablePanel()
     {
         gameObject.SetActive(true);
+    }
+
+    private void OnStartMissionClick()
+    {
+        StartButtonClicked?.Invoke(_missionData);
     }
 }

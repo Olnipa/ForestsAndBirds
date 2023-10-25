@@ -15,40 +15,34 @@ public class HeroView : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI ExperienceValue;
     [SerializeField] protected TextMeshProUGUI Name;
 
+    private HeroModel _heroModel;
     private Image _rayCastImage;
+    private HeroToggle _heroToggle;
 
-    public event UnityAction HeroViewSelected;
+    public event UnityAction<HeroModel> HeroViewSelected;
     public event UnityAction HeroViewUnSelected;
-    public event UnityAction Destroyed;
-
-    public  HeroToggle HeroToggle { get; private set; }
-
-    private void OnSelectValueChanged(bool isChecked)
-    {
-        if (isChecked)
-            HeroViewSelected?.Invoke();
-        else
-            HeroViewUnSelected?.Invoke();
-    }
-
-    private void Awake()
-    {
-        _rayCastImage = GetComponent<Image>();
-        HeroToggle = GetComponent<HeroToggle>();
-        HeroToggle.onValueChanged.AddListener(OnSelectValueChanged);
-
-        SetAvailability(IsAvailable);
-    }
+    public event UnityAction<HeroView> Destroyed;
 
     private void OnDestroy()
     {
-        HeroToggle.onValueChanged.RemoveListener(OnSelectValueChanged);
-        Destroyed?.Invoke();
+        _heroModel.ExperienceUpdated -= UpdateExperience;
+        _heroModel.Unselected -= OnUnselected;
+        _heroToggle.onValueChanged.RemoveListener(OnSelectValueChanged);
+        Destroyed?.Invoke(this);
     }
 
-    public void SetToggleGroup(ToggleGroup toggleGroup)
+    public void Initialize(HeroModel heroModel, ToggleGroup toggleGroup)
     {
-        HeroToggle.group = toggleGroup;
+        _rayCastImage = GetComponent<Image>();
+        _heroToggle = GetComponent<HeroToggle>();
+        _heroToggle.group = toggleGroup;
+        _heroModel = heroModel;
+        UpdateInfo();
+
+        _heroModel.ExperienceUpdated += UpdateExperience;
+        _heroModel.Unlocked += Unlock;
+        _heroModel.Unselected += OnUnselected;
+        _heroToggle.onValueChanged.AddListener(OnSelectValueChanged);
     }
 
     public void SwitchRayCastTarget(bool isOn)
@@ -58,24 +52,43 @@ public class HeroView : MonoBehaviour
 
     public void SetAvailability(bool isAvailable)
     {
+        IsAvailable = isAvailable;
         _lockedView.gameObject.SetActive(!isAvailable);
         _unlockedView.gameObject.SetActive(isAvailable);
-        HeroToggle.enabled = isAvailable;
+        _heroToggle.enabled = isAvailable;
 
         if (isAvailable == false)
-            HeroToggle.isOn = false;
+            _heroToggle.isOn = false;
     }
 
-    public void UpdateInfo(string name, int experience, bool isAvailable)
+    public void UpdateInfo()
     {
-        Name.text = name;
-        UpdateExperience(experience);
-        IsAvailable = isAvailable;
-        SetAvailability(IsAvailable);
+        Name.text = _heroModel.Name;
+        UpdateExperience();
+        SetAvailability(_heroModel.IsUnlocked);
     }
 
-    public void UpdateExperience(int experience)
+    private void OnUnselected()
     {
-        ExperienceValue.text = Convert.ToString(experience);
+        _heroToggle.isOn = false;
+    }
+
+    private void Unlock()
+    {
+        SetAvailability(true);
+        _heroModel.Unlocked -= Unlock;
+    }
+
+    private void UpdateExperience()
+    {
+        ExperienceValue.text = Convert.ToString(_heroModel.Experience);
+    }
+
+    private void OnSelectValueChanged(bool isChecked)
+    {
+        if (isChecked)
+            HeroViewSelected?.Invoke(_heroModel);
+        else
+            HeroViewUnSelected?.Invoke();
     }
 }

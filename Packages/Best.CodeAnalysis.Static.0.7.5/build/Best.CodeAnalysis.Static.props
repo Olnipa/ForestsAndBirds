@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CodeAnalysisPackageVersion>0.7.5</CodeAnalysisPackageVersion>
+    <!--nuget package's dir-->
+    <CodeAnalysisRuleSetLocation Condition=" '$(NuGetPackageRoot)' != '' ">$(NuGetPackageRoot)best.codeanalysis.static\$(CodeAnalysisPackageVersion)</CodeAnalysisRuleSetLocation>
+    <CodeAnalysisRuleSetLocation Condition=" '$(CodeAnalysisRuleSetLocation)' == '' ">$(USERPROFILE)\.nuget\packages\best.codeanalysis.static\$(CodeAnalysisPackageVersion)</CodeAnalysisRuleSetLocation>
+    <CodeAnalysisRuleSetLocation Condition=" '$(CodeAnalysisRuleSetLocation)' == '' and '$(SolutionDir)' != '' ">$(SolutionDir)\packages\best.codeanalysis.static.$(CodeAnalysisPackageVersion)</CodeAnalysisRuleSetLocation>
+    <CodeAnalysisRuleSetLocation Condition=" '$(CodeAnalysisRuleSetLocation)' == '' ">$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))\packages\best.codeanalysis.static.$(CodeAnalysisPackageVersion)</CodeAnalysisRuleSetLocation>
+    <!--first use project's ruleset, then use solution's ruleset, if project and solution not contails 'CodeAnalysis.ruleset', use nuget package's ruleset-->
+    <CodeAnalysisRuleSetFilePath>$(ProjectDir)CodeAnalysis.ruleset</CodeAnalysisRuleSetFilePath>
+    <CodeAnalysisRuleSetFilePath Condition="!Exists('$(CodeAnalysisRuleSetFilePath)')">$(SolutionDir)CodeAnalysis.ruleset</CodeAnalysisRuleSetFilePath>
+    <!--second use project's ruleset, then use solution's ruleset, if project and solution not contails 'CodeAnalysis.Static.ruleset', use nuget package's ruleset-->
+    <CodeAnalysisRuleSetFilePath Condition="!Exists('$(CodeAnalysisRuleSetFilePath)')">$(ProjectDir)CodeAnalysis.Static.ruleset</CodeAnalysisRuleSetFilePath>
+    <CodeAnalysisRuleSetFilePath Condition="!Exists('$(CodeAnalysisRuleSetFilePath)')">$(SolutionDir)CodeAnalysis.Static.ruleset</CodeAnalysisRuleSetFilePath>
+    <CodeAnalysisRuleSetFilePath Condition="!Exists('$(CodeAnalysisRuleSetFilePath)')">$(CodeAnalysisRuleSetLocation)\Best.CodeAnalysis.Static.ruleset</CodeAnalysisRuleSetFilePath>
+    <!--first use project or solution's stypecop config, then use nuget package's config-->
+    <CodeAnalysisStylecopFilePath>$(ProjectDir)\stylecop.json</CodeAnalysisStylecopFilePath>
+    <CodeAnalysisStylecopFilePath Condition="!Exists('$(CodeAnalysisStylecopFilePath)')">$(SolutionDir)\stylecop.json</CodeAnalysisStylecopFilePath>
+    <CodeAnalysisStylecopFilePath Condition="!Exists('$(CodeAnalysisStylecopFilePath)')">$(CodeAnalysisRuleSetLocation)\stylecop.json</CodeAnalysisStylecopFilePath>
+  </PropertyGroup>
+  <PropertyGroup>
+      <CodeAnalysisRuleSet>$(CodeAnalysisRuleSetFilePath)</CodeAnalysisRuleSet> 
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(CodeAnalysisStylecopFilePath)" Link="stylecop.json" />
+  </ItemGroup>
+</Project>
