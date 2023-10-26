@@ -7,15 +7,15 @@ public class MissionButtonModel : IDisposable
 
     public MissionData FirstMissionData { get; private set; }
 
+    public event Action StateUpdated;
+
     public MissionButtonModel(MissionData firstMission, MissionPanel leftMissionPanel)
     {
         FirstMissionData = firstMission;
         LeftMissionPanel = leftMissionPanel;
 
-        FirstMissionData.StateUpdated += OnMissionDataUpdated;
+        FirstMissionData.StateUpdated += OnMissionStateUpdated;
     }
-
-    public event Action StateUpdated;
 
     public virtual void OnMissionInfoButtonClick()
     {
@@ -39,10 +39,10 @@ public class MissionButtonModel : IDisposable
 
     public virtual void Dispose()
     {
-        FirstMissionData.StateUpdated -= OnMissionDataUpdated;
+        FirstMissionData.StateUpdated -= OnMissionStateUpdated;
     }
 
-    protected void OnMissionDataUpdated()
+    protected void OnMissionStateUpdated()
     {
         StateUpdated?.Invoke();
     }

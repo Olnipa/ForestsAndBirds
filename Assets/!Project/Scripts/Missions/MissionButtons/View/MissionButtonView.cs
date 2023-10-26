@@ -29,7 +29,6 @@ public class MissionButtonView : MonoBehaviour
 
         _missionButtonModel.StateUpdated += OnStateUpdated;
         SetID(_missionButtonModel.GetID());
-        SetNewState(_missionButtonModel.GetState());
 
         _infoButton.onClick.AddListener(OnMissionButtonClick);
 
@@ -39,6 +38,7 @@ public class MissionButtonView : MonoBehaviour
 
         _stateFactory = new MissionStateFactory(_animator, _image, _activeButtonColor, _temporaryBlockedButtonColor, _completedButtonColor);
         _stateMachine.ChangeState(_stateFactory.CreateState(_state));
+        UpdateState(_missionButtonModel.GetState());
     }
 
     private void OnDestroy()
@@ -54,9 +54,8 @@ public class MissionButtonView : MonoBehaviour
         ButtonClicked?.Invoke(_missionButtonModel);
     }
 
-    public void SetNewState(MissionState newState)
+    public void UpdateState(MissionState newState)
     {
-        _state = newState;
         _stateMachine.ChangeState(_stateFactory.CreateState(newState));
     }
 
@@ -67,6 +66,6 @@ public class MissionButtonView : MonoBehaviour
 
     private void OnStateUpdated()
     {
-        SetNewState(_missionButtonModel.GetState());
+        UpdateState(_missionButtonModel.GetState());
     }
 }

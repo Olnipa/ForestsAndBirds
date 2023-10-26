@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionButtonViewFactory : MonoBehaviour, IViewFactory<List<MissionButtonModel>, List<MissionButtonView>>
+public class MissionButtonsViewFactory : MonoBehaviour, IViewFactory<List<MissionButtonModel>, List<MissionButtonView>>
 {
     [SerializeField] private GameObject _missionButtonPrefab;
     [SerializeField] private Transform _missionContainer;

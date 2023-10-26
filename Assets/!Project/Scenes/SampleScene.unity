@@ -942,8 +942,9 @@ GameObject:
   m_Component:
   - component: {fileID: 449189175}
   - component: {fileID: 449189177}
+  - component: {fileID: 449189178}
   m_Layer: 5
-  m_Name: MissionPanelsHandler
+  m_Name: MissionPanels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -982,6 +983,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449189174}
   m_CullTransparentMesh: 1
+--- !u!114 &449189178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449189174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c0cb79ef54c4e49871e5e7aad2cf3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _closePanelsButton: {fileID: 268660957}
 --- !u!1 &506208362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1965,6 +1979,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5827409027508641915, guid: 22228897d1e30f94d894e8c071ff739a, type: 3}
   m_PrefabInstance: {fileID: 4633314924603288710}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1047690314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6986647283422589093, guid: 22228897d1e30f94d894e8c071ff739a, type: 3}
+  m_PrefabInstance: {fileID: 4633314924603288710}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047690310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955056b5876bb1c4ba7c20029660ec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1088769482
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,6 +2331,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5827409027508641915, guid: 22228897d1e30f94d894e8c071ff739a, type: 3}
   m_PrefabInstance: {fileID: 1249951484}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1249951486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6986647283422589093, guid: 22228897d1e30f94d894e8c071ff739a, type: 3}
+  m_PrefabInstance: {fileID: 1249951484}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955056b5876bb1c4ba7c20029660ec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1273386809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2354,10 +2390,9 @@ GameObject:
   - component: {fileID: 1375801105}
   - component: {fileID: 1375801107}
   - component: {fileID: 1375801106}
-  - component: {fileID: 1375801109}
   - component: {fileID: 1375801110}
   m_Layer: 5
-  m_Name: MissionsController
+  m_Name: MissionsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2421,18 +2456,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375801104}
   m_CullTransparentMesh: 1
---- !u!114 &1375801109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375801104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7c7b8b6b7a4e3b43ae90feae70c05c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1375801110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2536,7 +2559,7 @@ GameObject:
   - component: {fileID: 1434951197}
   - component: {fileID: 1434951198}
   m_Layer: 5
-  m_Name: HeroesHandler
+  m_Name: HeroesPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3265,10 +3288,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b1b6f1d3988f94fa2565a959a4fcc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _closePanelsButton: {fileID: 0}
-  _leftMissionPanel: {fileID: 0}
-  _rightMissionPanel: {fileID: 0}
-  _fightPanel: {fileID: 0}
+  _closePanelsButton: {fileID: 268660957}
+  _leftMissionPanel: {fileID: 1047690314}
+  _rightMissionPanel: {fileID: 1249951486}
+  _fightPanel: {fileID: 1766220511}
+  _uiPanelsCloser: {fileID: 449189178}
+  _chooseHeroMessage: {fileID: 796124563}
   _heroViewFactory: {fileID: 1434951198}
   _missionButtonViewFactory: {fileID: 1375801110}
 --- !u!4 &2095834487

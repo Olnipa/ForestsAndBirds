@@ -2,17 +2,18 @@ using UnityEngine;
 
 public class ChooseHeroMessage : MonoBehaviour
 {
-    [SerializeField] private MissionPanelsController _missionPanelHandler;
+    private StartMissionInitializer _panelsController;
 
-    private void Awake()
+    public void Initialize(StartMissionInitializer panelsController)
     {
-        _missionPanelHandler.HeroIsNotChosen += EnableGameObject;
+        _panelsController = panelsController;
+        _panelsController.HeroIsNotChosen += EnableGameObject;
         gameObject.SetActive(false);
     }
 
     private void OnDestroy()
     {
-        _missionPanelHandler.HeroIsNotChosen -= EnableGameObject;
+        _panelsController.HeroIsNotChosen -= EnableGameObject;
     }
 
     public void OnAnimationEnd()

@@ -33,7 +33,7 @@ public abstract class HeroModel
         ExperienceUpdated?.Invoke();
     }
 
-    public void UnSelectHero()
+    public void ToUnSelect()
     {
         Unselected?.Invoke();
     }

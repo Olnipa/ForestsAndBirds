@@ -11,7 +11,7 @@ public class DoubleMissionButtonModel : MissionButtonModel
         _secondMissionData = secondMission;
         _rightMissionPanel = rightMissionPanel;
 
-        _secondMissionData.StateUpdated += OnMissionDataUpdated;
+        _secondMissionData.StateUpdated += OnMissionStateUpdated;
     }
 
     public override void OnMissionInfoButtonClick()
@@ -40,6 +40,6 @@ public class DoubleMissionButtonModel : MissionButtonModel
     public override void Dispose()
     {
         base.Dispose();
-        _secondMissionData.StateUpdated -= OnMissionDataUpdated;
+        _secondMissionData.StateUpdated -= OnMissionStateUpdated;
     }
 }

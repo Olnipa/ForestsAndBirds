@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class CompositeDisposable
 {
-    public List<IDisposable> Disposable { get; private set; }
+    private List<IDisposable> Disposable = new List<IDisposable>();
 
     public void AddRange(IDisposable[] disposables)
     {

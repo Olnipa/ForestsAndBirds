@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 public class MissionsUnlocker : IDisposable
 {
-    private HeroesController _heroesController;
     private List<MissionData> _missionsData;
 
     public event Action<MissionData> MissionUnlocked;
 
-    public void Initialize(List<MissionData> missionsData, HeroesController heroesController)
+    public MissionsUnlocker(List<MissionData> missionsData)
     {
-        _heroesController = heroesController;
         _missionsData = missionsData;
 
         if (_missionsData == null)
@@ -20,7 +17,7 @@ public class MissionsUnlocker : IDisposable
 
         foreach (var missionData in _missionsData)
         {
-            missionData.Completed += OnMissionComplete;
+            missionData.Completed += UnlockMissions;
         }
     }
 
@@ -28,20 +25,21 @@ public class MissionsUnlocker : IDisposable
     {
         foreach (var missionData in _missionsData)
         {
-            missionData.Completed -= OnMissionComplete;
+            missionData.Completed -= UnlockMissions;
         }
     }
 
-    private void OnMissionComplete(MissionData missionData)
+    private void UnlockMissions(MissionData completedMissionData)
     {
-        foreach (var missionIDToUnlock in missionData.MissionsIDToUnlock)
+        foreach (var missionIDToUnlock in completedMissionData.MissionsIDToUnlock)
         {
             MissionData missionToUnlock = _missionsData.FirstOrDefault(missionData => missionData.ID == missionIDToUnlock);
 
             if (missionToUnlock != null && missionToUnlock.State == MissionState.Blocked)
+            {
                 missionToUnlock.SetNewState(MissionState.Active);
+                MissionUnlocked?.Invoke(completedMissionData);
+            }
         }
-
-        MissionUnlocked?.Invoke(missionData);
     }
 }
