@@ -1,62 +1,64 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MissionButtonView : MonoBehaviour
+public class MissionButtonView : Button
 {
-    [SerializeField] private Color _activeButtonColor;
-    [SerializeField] private Color _temporaryBlockedButtonColor;
-    [SerializeField] private Color _completedButtonColor;
     [SerializeField] private Animator _animator;
     [SerializeField] private TextMeshProUGUI _id;
     [SerializeField] private Image _image;
-    [SerializeField] private Button _infoButton;
     [SerializeField] private RectTransform _rectTransform;
 
-    private MissionButtonModel _missionButtonModel;
+    private MissionButton _missionButton;
     
-    private StateMachine _stateMachine = new MissionStateMachine();
+    private StateMachine _missionStateMachine = new MissionStateMachine();
     private MissionStateFactory _stateFactory;
     private MissionState _state;
 
+    private const string HighlightedTrigger = "HighlightedTrigger";
+    private const string NormalTrigger = "NormalTrigger";
+
     public event Action<MissionButtonView> Destroyed;
-    public event Action<MissionButtonModel> ButtonClicked;
+    public event Action<MissionButton> ButtonClicked;
 
-    public void InitializeView(MissionButtonModel missionButtonModel)
+    public void InitializeView(MissionButton missionButton)
     {
-        _missionButtonModel = missionButtonModel;
+        _missionButton = missionButton;
 
-        _missionButtonModel.StateUpdated += OnStateUpdated;
-        SetID(_missionButtonModel.GetID());
+        _missionButton.StateUpdated += OnStateUpdated;
+        SetID(_missionButton.GetID());
 
-        _infoButton.onClick.AddListener(OnMissionButtonClick);
+        onClick.AddListener(OnMissionButtonClick);
 
         transform.localPosition = Vector3.zero;
-        _rectTransform.anchorMin = _missionButtonModel.GetAnchorsPosition();
+        _rectTransform.anchorMin = _missionButton.GetAnchorsPosition();
         _rectTransform.anchorMax = _rectTransform.anchorMin;
 
-        _stateFactory = new MissionStateFactory(_animator, _image, _activeButtonColor, _temporaryBlockedButtonColor, _completedButtonColor);
-        _stateMachine.ChangeState(_stateFactory.CreateState(_state));
-        UpdateState(_missionButtonModel.GetState());
+        _stateFactory = new MissionStateFactory(_animator, _image);
+        _missionStateMachine.ChangeState(_stateFactory.CreateState(_state));
+        UpdateState(_missionButton.GetState());
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
-        _missionButtonModel.StateUpdated -= OnStateUpdated;
-        _infoButton.onClick.RemoveListener(OnMissionButtonClick);
+        base.OnDestroy();
+        _missionButton.StateUpdated -= OnStateUpdated;
+        onClick.RemoveListener(OnMissionButtonClick);
         Destroyed?.Invoke(this);
     }
 
     public void OnMissionButtonClick()
     {
-        _missionButtonModel.OnMissionInfoButtonClick();
-        ButtonClicked?.Invoke(_missionButtonModel);
+        _animator.SetTrigger(HighlightedTrigger);
+        _missionButton.OnMissionInfoButtonClick();
+        ButtonClicked?.Invoke(_missionButton);
     }
 
     public void UpdateState(MissionState newState)
     {
-        _stateMachine.ChangeState(_stateFactory.CreateState(newState));
+        _missionStateMachine.ChangeState(_stateFactory.CreateState(newState));
     }
 
     public void SetID(string id)
@@ -66,6 +68,21 @@ public class MissionButtonView : MonoBehaviour
 
     private void OnStateUpdated()
     {
-        UpdateState(_missionButtonModel.GetState());
+        UpdateState(_missionButton.GetState());
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        _animator.ResetTrigger(NormalTrigger);
+        _animator.SetTrigger(HighlightedTrigger);
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        if(IsPressed() == false)
+        {
+            _animator.ResetTrigger(HighlightedTrigger);
+            _animator.SetTrigger(NormalTrigger);
+        }
     }
 }

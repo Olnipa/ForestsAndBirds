@@ -31,6 +31,7 @@ public class HeroToggle : Toggle
         else
             _animator.SetTrigger(ToggleDeselectedTrigger);
     }
+
     public override void OnPointerEnter(PointerEventData eventData)
     {
         _animator.ResetTrigger(NormalTrigger);

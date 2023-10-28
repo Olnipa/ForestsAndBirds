@@ -17,44 +17,70 @@ public class BootStrap : MonoBehaviour
 
     private CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
+    private List<MissionData> _missionsData;
+    private List<MissionButtonView> _missionButtonsViews;
+    private List<MissionButton> _missionButtons;
+    private StartMissionInitializer _startMissionInitializer;
+    private MissionsUnlocker _missionsUnlocker;
+
+    private Dictionary<Type, HeroModel> _heroModels;
+    private List<HeroView> _heroViews;
+    private HeroSelector _heroSelector;
+    private HeroUnlocker _heroUnlocker;
+    private ExperienceDistributor _experienceDistributor;
+
+    private FightPanelInitializer _fightPanelInitializer;
+
     private void Start()
     {
-        MissionLoader missionLoader = new MissionLoader();
-        List<MissionData> missionsData = missionLoader.GetMissionsData();
+        InitializeMissions();
+        InitializeHeroes();
+        InitializeUIMissionPanels();
+        InitializeFinishMissionHandlers();
 
-        HeroLoader _heroLoader = new HeroLoader();
-        Dictionary<Type, HeroModel> heroModels = _heroLoader.GetHeroes();
-        List<HeroView> heroViews = _heroViewFactory.CreateViews(heroModels);
-        HeroSelector heroSelector = new HeroSelector(heroViews);
-        _uiPanelsCloser.Initialize();
-
-        StartMissionInitializer missionPanelsController = new StartMissionInitializer(_closePanelsButton, _leftMissionPanel, _rightMissionPanel, _fightPanel, heroSelector);
-        MissionsUnlocker missionsUnlocker = new MissionsUnlocker(missionsData);
-        _chooseHeroMessage.Initialize(missionPanelsController);
-
-        StartMissionInitializer startMissionInitializer = new StartMissionInitializer(_closePanelsButton, _leftMissionPanel, _rightMissionPanel, _fightPanel, heroSelector);
-        HeroUnlocker heroUnlocker = new HeroUnlocker(missionsData, heroModels, heroViews, _uiPanelsCloser, startMissionInitializer);
-
-        ExperienceDistributor experienceDistributor = new ExperienceDistributor(missionsData, heroModels, heroSelector);
-        
-        MissionButtonsModelFactory missionButtonsFactory = new MissionButtonsModelFactory(_leftMissionPanel, _rightMissionPanel);
-        List<MissionButtonModel> missionButtonModels = missionButtonsFactory.CreateMissionButtonModels(missionsData);
-        List<MissionButtonView> missionButtonViews = _missionButtonViewFactory.CreateViews(missionButtonModels);
-
-        FightPanelInitializer fightPanelInitializer = new FightPanelInitializer(_fightPanel, missionPanelsController, heroSelector);
-        UIStateChanger uiStateChanger = new UIStateChanger(missionButtonViews, fightPanelInitializer, _uiPanelsCloser, startMissionInitializer);
-
-        _compositeDisposable.AddRange(missionButtonModels.ToArray());
-        _compositeDisposable.Add(missionPanelsController);
-        _compositeDisposable.Add(missionsUnlocker);
-        _compositeDisposable.Add(experienceDistributor);
-        _compositeDisposable.Add(heroUnlocker);
-        _compositeDisposable.Add(fightPanelInitializer);
-        _compositeDisposable.Add(startMissionInitializer);
+        _compositeDisposable.AddRange(_missionButtons.ToArray());
+        _compositeDisposable.Add(_startMissionInitializer);
+        _compositeDisposable.Add(_missionsUnlocker);
+        _compositeDisposable.Add(_experienceDistributor);
+        _compositeDisposable.Add(_heroUnlocker);
+        _compositeDisposable.Add(_fightPanelInitializer);
     }
 
     private void OnDestroy()
     {
         _compositeDisposable.DisposeAll();
+    }
+
+    private void InitializeMissions()
+    {
+        MissionLoader missionLoader = new MissionLoader();
+        _missionsData = missionLoader.GetMissionsData();
+        MissionButtonsFactory missionButtonsFactory = new MissionButtonsFactory(_leftMissionPanel, _rightMissionPanel);
+        _missionButtons = missionButtonsFactory.CreateMissionButtons(_missionsData);
+        _missionButtonsViews = _missionButtonViewFactory.CreateViews(_missionButtons);
+    }
+
+    private void InitializeHeroes()
+    {
+        HeroLoader _heroLoader = new HeroLoader();
+        _heroModels = _heroLoader.GetHeroes();
+        _heroViews = _heroViewFactory.CreateViews(_heroModels);
+        _heroSelector = new HeroSelector(_heroViews);
+        _uiPanelsCloser.Initialize();
+    }
+
+    private void InitializeUIMissionPanels()
+    {
+        _startMissionInitializer = new StartMissionInitializer(_closePanelsButton, _leftMissionPanel, _rightMissionPanel, _fightPanel, _heroSelector);
+        _fightPanelInitializer = new FightPanelInitializer(_fightPanel, _startMissionInitializer, _heroSelector);
+        _chooseHeroMessage.Initialize(_startMissionInitializer);
+        UIStateChanger uiStateChanger = new UIStateChanger(_missionButtonsViews, _fightPanelInitializer, _uiPanelsCloser, _startMissionInitializer);
+    }
+
+    private void InitializeFinishMissionHandlers()
+    {
+        _missionsUnlocker = new MissionsUnlocker(_missionsData);
+        _heroUnlocker = new HeroUnlocker(_missionsData, _heroModels, _heroViews, _uiPanelsCloser, _startMissionInitializer);
+        _experienceDistributor = new ExperienceDistributor(_missionsData, _heroModels, _heroSelector);
     }
 }

@@ -7,17 +7,10 @@ public class MissionStateFactory
     private Animator _animator;
     private Image _image;
 
-    private Color _activeButtonColor;
-    private Color _temporaryBlockedButtonColor;
-    private Color _completedButtonColor;
-
-    public MissionStateFactory(Animator buttonAnimator, Image buttonImage, Color activeColor, Color temporaryBlockedColor, Color completedColor)
+    public MissionStateFactory(Animator buttonAnimator, Image buttonImage)
     {
         _animator = buttonAnimator;
         _image = buttonImage;
-        _activeButtonColor = activeColor;
-        _temporaryBlockedButtonColor = temporaryBlockedColor;
-        _completedButtonColor = completedColor;
     }
 
     public MissionButtonState CreateState(MissionState state)
@@ -25,13 +18,13 @@ public class MissionStateFactory
         switch (state)
         {
             case MissionState.Active:
-                return new ActiveMissionButtonState(_animator, _image, _activeButtonColor);
+                return new ActiveMissionButtonState(_image);
             case MissionState.Blocked:
                 return new BlockedMissionButtonState(_image); 
             case MissionState.TemporaryBlocked:
-                return new TemporaryBlockedMissionButtonState(_animator, _image, _temporaryBlockedButtonColor); 
+                return new TemporaryBlockedMissionButtonState(_animator, _image); 
             case MissionState.Completed:
-                return new CompletedMissionButtonState(_animator, _image, _completedButtonColor); 
+                return new CompletedMissionButtonState(_animator, _image); 
             default:
                 throw new ArgumentException($"Unsupported Default State {state}");
         }

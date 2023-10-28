@@ -3,24 +3,26 @@ using UnityEngine.UI;
 
 public class TemporaryBlockedMissionButtonState : MissionButtonState
 {
-    private Color _temporaryBlockedButtonColor;
-    private Animator _missionButtonAnmator;
+    private Animator _missionButtonAnimator;
     private Image _missionButtonImage;
 
-    public TemporaryBlockedMissionButtonState(Animator missionButtonAnmator, Image missionButtonImage, Color temporaryBlockedButtonColor)
+    private const string _temporaryBlockedTriggerAnimator = "TempBlocked";
+
+    public TemporaryBlockedMissionButtonState(Animator missionButtonAnimator, Image missionButtonImage)
     {
-        _missionButtonAnmator = missionButtonAnmator;
+        _missionButtonAnimator = missionButtonAnimator;
         _missionButtonImage = missionButtonImage;
-        _temporaryBlockedButtonColor = temporaryBlockedButtonColor;
     }
 
     public override void Enter()
     {
-        if (_missionButtonAnmator != null)
-            _missionButtonAnmator.enabled = false;
-
-        _missionButtonImage.gameObject.SetActive(true);
-        _missionButtonImage.color = _temporaryBlockedButtonColor;
+        _missionButtonAnimator.SetTrigger(_temporaryBlockedTriggerAnimator);
         _missionButtonImage.raycastTarget = false;
+    }
+
+    public override void Exit()
+    {
+        _missionButtonAnimator.ResetTrigger(_temporaryBlockedTriggerAnimator);
+        _missionButtonImage.raycastTarget = true;
     }
 }

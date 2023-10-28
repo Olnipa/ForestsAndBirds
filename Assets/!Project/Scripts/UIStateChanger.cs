@@ -28,9 +28,9 @@ public class UIStateChanger
         _startMissionInitializer.Disposed += OnMissionPanelsControllerDisposed;
     }
 
-    private void OnMissionButtonClick(MissionButtonModel missionButton)
+    private void OnMissionButtonClick(MissionButton missionButton)
     {
-        if (missionButton is DoubleMissionButtonModel)
+        if (missionButton is DoubleMissionButton)
             _uiStateMachine.ChangeState(new DoubleMissionInfoUIState(_startMissionInitializer.LeftMissionPanel, _startMissionInitializer.RightMissionPanel));
         else
             _uiStateMachine.ChangeState(new SingleMissionInfoUIState(_startMissionInitializer.LeftMissionPanel));

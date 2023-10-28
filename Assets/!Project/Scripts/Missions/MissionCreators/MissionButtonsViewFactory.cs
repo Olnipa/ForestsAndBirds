@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionButtonsViewFactory : MonoBehaviour, IViewFactory<List<MissionButtonModel>, List<MissionButtonView>>
+public class MissionButtonsViewFactory : MonoBehaviour, IViewFactory<List<MissionButton>, List<MissionButtonView>>
 {
     [SerializeField] private GameObject _missionButtonPrefab;
     [SerializeField] private Transform _missionContainer;
 
-    public List<MissionButtonView> CreateViews(List<MissionButtonModel> _missionsButtonsModel)
+    public List<MissionButtonView> CreateViews(List<MissionButton> _missionsButtons)
     {
         List<MissionButtonView> missionButtonViews = new List<MissionButtonView>();
 
-        foreach (MissionButtonModel missionButtonModel in _missionsButtonsModel)
+        foreach (MissionButton missionButtonModel in _missionsButtons)
         {
             GameObject missionButtonGameObject = Instantiate(_missionButtonPrefab, _missionContainer);
 

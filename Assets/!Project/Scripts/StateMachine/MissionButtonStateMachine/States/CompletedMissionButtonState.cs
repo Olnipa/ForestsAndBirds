@@ -3,24 +3,26 @@ using UnityEngine.UI;
 
 public class CompletedMissionButtonState : MissionButtonState
 {
-    private Color _completedButtonColor;
-    private Animator _missionButtonAnmator;
+    private Animator _missionButtonAnimator;
     private Image _missionButtonImage;
 
-    public CompletedMissionButtonState(Animator missionButtonAnmator, Image missionButtonImage, Color completedButtonColor)
+    private const string _completedTriggerAnimator = "Completed";
+
+    public CompletedMissionButtonState(Animator missionButtonAnimator, Image missionButtonImage)
     {
-        _missionButtonAnmator = missionButtonAnmator;
+        _missionButtonAnimator = missionButtonAnimator;
         _missionButtonImage = missionButtonImage;
-        _completedButtonColor = completedButtonColor;
     }
 
     public override void Enter()
     {
-        if (_missionButtonAnmator != null)
-            _missionButtonAnmator.enabled = false;
-
-        _missionButtonImage.gameObject.SetActive(true);
-        _missionButtonImage.color = _completedButtonColor;
+        _missionButtonAnimator.SetTrigger(_completedTriggerAnimator);
         _missionButtonImage.raycastTarget = false;
+    }
+
+    public override void Exit()
+    {
+        _missionButtonAnimator.ResetTrigger(_completedTriggerAnimator);
+        _missionButtonImage.raycastTarget = true;
     }
 }

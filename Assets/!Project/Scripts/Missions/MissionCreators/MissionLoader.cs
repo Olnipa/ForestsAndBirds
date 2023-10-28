@@ -9,8 +9,10 @@ public class MissionLoader
 {
     private MissionDataFactory _missionDataFactory = new MissionDataFactory();
 
-    private const string DataFileDirectory = "Assets/!Project/StreamingAssets/MissionsData.csv";
+    private const string DataFileName = "MissionsData.csv";
     private const char CSVSectionSplitter = ';';
+
+    private string DataFilePath => Path.Combine(Application.streamingAssetsPath, DataFileName);
 
     public List<MissionData> GetMissionsData()
     {
@@ -28,7 +30,11 @@ public class MissionLoader
     private List<MissionData> LoadMissionsData()
     {
         List<MissionData> missionsData = new List<MissionData>();
-        string[] missionsDataLines = File.ReadAllLines(DataFileDirectory);
+
+        if (File.Exists(DataFilePath) == false)
+            throw new MissingReferenceException($"The file with data in the directory {DataFilePath} does not exist.");
+        
+        string[] missionsDataLines = File.ReadAllLines(DataFilePath);
 
         for (int i = 1; i < missionsDataLines.Length; i++)
         {

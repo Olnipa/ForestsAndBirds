@@ -52,11 +52,11 @@ public class MissionDataFactory
 
     private Vector2 GetPosition(string stringPositionX, string stringPositionY)
     {
-        if (!float.TryParse(stringPositionX, out float positsionX) || !float.TryParse(stringPositionY, out float positsionY))
+        if (float.TryParse(stringPositionX, out float positsionX) == false || float.TryParse(stringPositionY, out float positsionY) == false)
             throw new InvalidOperationException($"PositionX {stringPositionX} or PositionY {stringPositionY} is not a number.");
 
         if (positsionX < 0 || positsionX > 1 || positsionY < 0 || positsionY > 1)
-            throw new InvalidOperationException($"PositionX {stringPositionX} or PositionY {stringPositionY} is out of range.");
+            throw new InvalidOperationException($"PositionX {positsionX} or PositionY {positsionY} is out of range.");
 
         return new Vector2(positsionX, positsionY);
     }
