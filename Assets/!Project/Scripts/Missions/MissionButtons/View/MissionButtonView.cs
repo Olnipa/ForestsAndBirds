@@ -79,10 +79,7 @@ public class MissionButtonView : Button
 
     public override void OnPointerExit(PointerEventData eventData)
     {
-        if(IsPressed() == false)
-        {
-            _animator.ResetTrigger(HighlightedTrigger);
-            _animator.SetTrigger(NormalTrigger);
-        }
+        _animator.ResetTrigger(HighlightedTrigger);
+        _animator.SetTrigger(NormalTrigger);
     }
 }
