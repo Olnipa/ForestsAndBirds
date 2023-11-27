@@ -9,11 +9,11 @@ The project was completed in Unity version 2022.3.4f1
 
 ## Task
 ## Задача
-
+(eng)
 - Develop a prototype of a global map with plot mission points to which you need to send one or another hero and earn points for them.
 - **The simplest gameplay cycle:** Map with missions - see the mission - select the mission - read the pre-history of the mission - select a hero to complete - start the mission - read the contents of the mission - repeat.
 - **Add. task:** The prototype must be configured “not by a programmer”, but by editing special. file - indicate the number of points, their location and all their contents.
-
+(rus)
 - Разработать прототип глобальной карты с точками-сюжетными-миссиями, на которые необходимо отправлять того или иного героя и зарабатывать им очки.
 - **Простейший геймплейный цикл:** Карта с миссиями — видишь миссию — выбираешь миссию — читаешь пред-историю миссии — выбираешь героя для прохождения — стартуешь миссию — читаешь содержимое миссии — повторить.
 - **Доп. задача:** Прототип должен настраиваться “не программистом”, а путем редактирования спец. файла - указываться количество точек, их расположение и все их содержимое.
