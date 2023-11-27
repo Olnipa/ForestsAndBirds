@@ -1,4 +1,5 @@
-# Test task for Unfrozen Studio, vacancy **Gameplay Programmer (Unity, C#) (Тестовое задание для Unfrozen Studio, вакансия **Gameplay Programmer (Unity, C#)) **
+# Test task for Unfrozen Studio, vacancy **Gameplay Programmer (Unity, C#) **
+# (Тестовое задание для Unfrozen Studio, вакансия **Gameplay Programmer (Unity, C#)) **
 
 [Link to task condition (Ссылка на условие задания)](https://unfrozen.notion.site/Gameplay-Programmer-Unity-C-8ec30a4e89a149dabdf40414a58c6ef3)
 
