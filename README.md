@@ -1,7 +1,6 @@
 # Test task for Unfrozen Studio, vacancy **Gameplay Programmer (Unity, C#) (Тестовое задание для Unfrozen Studio, вакансия **Gameplay Programmer (Unity, C#)) **
 
-[Link to task condition](https://unfrozen.notion.site/Gameplay-Programmer-Unity-C-8ec30a4e89a149dabdf40414a58c6ef3)
-[Ссылка на условие задания](https://unfrozen.notion.site/Gameplay-Programmer-Unity-C-8ec30a4e89a149dabdf40414a58c6ef3)
+[Link to task condition (Ссылка на условие задания)](https://unfrozen.notion.site/Gameplay-Programmer-Unity-C-8ec30a4e89a149dabdf40414a58c6ef3)
 
 The project was completed in Unity version 2022.3.4f1 (Проект выполнен в Unity версии 2022.3.4f1)
 
@@ -56,7 +55,7 @@ The ";" character is selected as the section separator in the csv file. If the d
 ### Стартовая сцена (Starting scene)
 
 (Eng)
-The starting scene is a single GameScene. It is also the entry point of the BootStrap project.
+- The starting scene is a single GameScene. It is also the entry point of the BootStrap project.
 
 (Rus)
-Стартовой сценой является единственная сцена GameScene. На ней же находится точка входа проекта BootStrap.
+- Стартовой сценой является единственная сцена GameScene. На ней же находится точка входа проекта BootStrap.
