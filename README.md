@@ -19,13 +19,12 @@ The project was completed in Unity version 2022.3.4f1 (Проект выполн
 ## Project description (Описание проекта)
 
 (Eng)
-### Special file
+### Special file (Спец. файл)
 A file of type **csv** was chosen as a “special file” for setting up the prototype by a “non-programmer”. Unlike, for example, a scriptable object, a **csv** file will allow you to store it online in the future and change the settings specified in it at any time (including in builds) without the need to upload a new build and undergo site moderation.
 
 The ";" character is selected as the section separator in the csv file. If the data from the file is displayed incorrectly, then in the editor you need to specify the ";" character as a separator. For example, in Excel it is usually: File => Options => Advanced => "Editing Options" block => Section separator.
 
 (Rus)
-### Спец. файл
 В качестве "спец. файла" для настройки прототипа "не программистом" был выбран файл типа **csv**. В отличие от например скриптабл объекта, **csv** файл позволит в перспективе хранить его онлайн и менять указанные в нем настройки когда угодно (в том числе в билдах) без необходимости загружать новый билд и проходить модерацию площадок.
 
 В качестве разделителя разделов в файле csv выбран символ ";". Если данные из файла отображаются некорректно, значит в редакторе необходимо указать в качестве разделителя символ ";". Например в Excel обычно это: Файл => Параметры => Дополнительно => Блок "Параметры правки" => Разделитель разделов.
@@ -52,7 +51,7 @@ The ";" character is selected as the section separator in the csv file. If the d
 - В столбце "ID миссий" можно указывать любые ID, но для каждой миссии оно должно быть уникальным
 - При заполнении столбцов "ID взаимоисключающей миссии" и "Анлок Миссий" важно указывать только существующие ID из первого столбца "ID миссии".
 
-### Стартовая сцена (Starting scene)
+### Starting scene (Стартовая сцена)
 
 (Eng)
 - The starting scene is a single GameScene. It is also the entry point of the BootStrap project.
